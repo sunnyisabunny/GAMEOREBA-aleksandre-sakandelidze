@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminal X-Omega | Intergalactic Spaceport</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #020c1a;
+      --panel: rgba(2, 18, 40, 0.9);
+      --border: #0d3f6e;
+      --glow: #00cfff;
+      --glow2: #f97316;
+      --text: #b8ddf5;
+      --dim: #2e5a7a;
+      --green: #22d3a0;
+      --yellow: #fbbf24;
+      --red: #ef4444;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(0,80,160,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 30% at 80% 100%, rgba(249,115,22,0.08) 0%, transparent 55%);
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      padding: 48px 40px 32px;
+      text-align: center;
+    }
+
+    .warp-overlay {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 100% 100% at 50% -20%, rgba(0,207,255,0.12) 0%, transparent 60%),
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(0,207,255,0.02) 60px, rgba(0,207,255,0.02) 61px),
+        repeating-linear-gradient(0deg,  transparent, transparent 60px, rgba(0,207,255,0.02) 60px, rgba(0,207,255,0.02) 61px);
+      pointer-events: none;
+    }
+
+    .header-content { position: relative; z-index: 1; }
+
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(28px, 7vw, 72px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #fff;
+      text-shadow: 0 0 20px var(--glow), 0 0 60px rgba(0,207,255,0.3);
+      animation: flicker 9s ease-in-out infinite;
+    }
+    @keyframes flicker { 0%,93%,97%,100%{opacity:1} 95%{opacity:0.6} }
+
+    header p {
+      font-size: 12px;
+      letter-spacing: 5px;
+      color: var(--dim);
+      margin-top: 8px;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 20px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      position: relative;
+      z-index: 1;
+    }
+    .status-bar span { color: var(--glow); }
+    .status-bar span.blink {
+      color: var(--red);
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── MAIN ── */
+    main { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+    section { margin-bottom: 60px; }
+
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(14px, 3vw, 20px);
+      letter-spacing: 5px;
+      color: var(--glow);
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── DESTINATIONS ── */
+    .grid-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    article {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    article:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,207,255,0.12);
+    }
+
+    figure img {
+      width: 100%; height: 160px;
+      object-fit: cover; display: block;
+      filter: saturate(0.7) brightness(0.8);
+    }
+
+    figcaption { padding: 14px 16px 10px; }
+    figcaption h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px; letter-spacing: 2px;
+      color: #fff; margin-bottom: 5px;
+    }
+    figcaption p { font-size: 12px; color: var(--dim); line-height: 1.5; }
+
+    .card-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px 14px;
+      border-top: 1px solid var(--border);
+    }
+    .card-details span { font-size: 11px; color: var(--yellow); letter-spacing: 1px; }
+
+    button {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px; letter-spacing: 2px;
+      padding: 7px 14px;
+      background: transparent;
+      border: 1px solid var(--glow);
+      color: var(--glow);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button:hover { background: var(--glow); color: var(--bg); }
+
+    /* ── TABLE ── */
+    .hologram-overlay {
+      border: 1px solid rgba(0,207,255,0.2);
+      background: rgba(0,10,30,0.7);
+      padding: 28px;
+      box-shadow: 0 0 40px rgba(0,207,255,0.05), inset 0 0 40px rgba(0,0,0,0.3);
+      position: relative; overflow: hidden;
+    }
+    .hologram-overlay::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(0,207,255,0.015) 8px, rgba(0,207,255,0.015) 9px);
+      pointer-events: none;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; position: relative; z-index: 1; }
+    caption {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px; letter-spacing: 4px;
+      color: var(--dim); margin-bottom: 14px; text-align: left;
+    }
+    thead th {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px; letter-spacing: 3px;
+      color: var(--glow); padding: 10px 14px;
+      border-bottom: 1px solid var(--border); text-align: left;
+    }
+    tbody tr { border-bottom: 1px solid rgba(13,63,110,0.4); transition: background 0.15s; }
+    tbody tr:hover { background: rgba(0,207,255,0.04); }
+    tbody td { padding: 11px 14px; color: var(--text); }
+    tfoot td {
+      padding: 12px 14px; font-size: 11px;
+      letter-spacing: 2px; color: var(--dim);
+      border-top: 1px solid var(--border);
+      animation: blink 2s step-end infinite;
+    }
+
+    .status-go    { color: var(--green);  font-weight: 600; }
+    .status-wait  { color: var(--yellow); font-weight: 600; }
+    .status-delay { color: var(--glow2);  font-weight: 600; }
+    .status-stop  { color: var(--red);    font-weight: 600; }
+
+    /* ── BOOKING ── */
+    .kiosk-interface {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 32px 36px;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
+    }
+
+    fieldset {
+      border: 1px solid rgba(13,63,110,0.6);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    legend {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px; letter-spacing: 4px;
+      color: var(--glow); padding: 0 10px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
+    .field:first-of-type { margin-top: 8px; }
+
+    label { font-size: 10px; letter-spacing: 2px; color: var(--dim); text-transform: uppercase; }
+
+    input[type="text"],
+    input[type="search"],
+    select {
+      background: rgba(0,10,30,0.8);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px; padding: 10px 14px;
+      outline: none; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus {
+      border-color: var(--glow);
+      box-shadow: 0 0 10px rgba(0,207,255,0.2);
+    }
+    select option { background: #020c1a; }
+
+    button[type="submit"] {
+      margin-top: 10px; width: 100%; padding: 14px;
+      font-size: 13px;
+      background: var(--glow); border-color: var(--glow);
+      color: var(--bg); font-weight: 700;
+      box-shadow: 0 0 20px rgba(0,207,255,0.3);
+    }
+    button[type="submit"]:hover {
+      box-shadow: 0 0 40px rgba(0,207,255,0.5);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 40px; text-align: center;
+      font-size: 10px; letter-spacing: 3px; color: var(--dim);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 32px 20px 24px; }
+      .kiosk-interface { padding: 20px 18px; }
+      .hologram-overlay { padding: 18px 14px; overflow-x: auto; }
+      .status-bar { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Step 3: Header -->
+  <header>
+    <div class="warp-overlay"></div>
+    <div class="header-content">
+      <h1>TERMINAL X-OMEGA</h1>
+      <p>GATEWAY TO THE OUTER RIM SECTOR</p>
+    </div>
+    <div class="status-bar">
+      <span>SYSTEM: ONLINE</span>
+      <span class="blink">TRAFFIC: HEAVY</span>
+      <span>TEMP: -270°C</span>
+    </div>
+  </header>
+
+  <!-- Step 4: Main -->
+  <main>
+
+    <!-- Section 1: Destinations -->
+    <section id="destinations">
+      <h2>POPULAR FLIGHT PATHS</h2>
+      <div class="grid-wrapper">
+
+        <article>
+          <figure>
+            <img src="assets/dest_kepler.jpeg" alt="Kepler-186f" />
+            <figcaption>
+              <h3>Kepler-186f</h3>
+              <p>A lush exoplanet in the habitable zone. Breathable atmosphere confirmed.</p>
+            </figcaption>
+          </figure>
+          <div class="card-details">
+            <span>Class: Habitable</span>
+            <button>BOOK PASSAGE</button>
+          </div>
+        </article>
+
+        <article>
+          <figure>
+            <img src="assets/dest_titan.jpeg" alt="Titan Station" />
+            <figcaption>
+              <h3>Titan Station</h3>
+              <p>Saturn's largest moon. Heavy mining operations. Not for the faint-hearted.</p>
+            </figcaption>
+          </figure>
+          <div class="card-details">
+            <span>Class: Industrial</span>
+            <button>BOOK PASSAGE</button>
+          </div>
+        </article>
+
+        <article>
+          <figure>
+            <img src="assets/dest_nebula.jpeg" alt="Nebula Resort" />
+            <figcaption>
+              <h3>Nebula Resort</h3>
+              <p>The galaxy's most exclusive retreat. Zero-gravity spa included.</p>
+            </figcaption>
+          </figure>
+          <div class="card-details">
+            <span>Class: Luxury</span>
+            <button>BOOK PASSAGE</button>
+          </div>
+        </article>
+
+        <article>
+          <figure>
+            <img src="assets/dest_blackhole.jpeg" alt="Event Horizon" />
+            <figcaption>
+              <h3>Event Horizon</h3>
+              <p>Proximity tourism near a black hole. Liability waiver mandatory.</p>
+            </figcaption>
+          </figure>
+          <div class="card-details">
+            <span>Class: Extreme</span>
+            <button>BOOK PASSAGE</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Departure Board -->
+    <section id="schedule">
+      <div class="hologram-overlay">
+        <h2>LIVE DEPARTURE BOARD</h2>
+        <table>
+          <caption>REAL-TIME WARP GATE STATUS</caption>
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>Destination</th>
+              <th>Gate</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>XO-441</td>
+              <td>Kepler-186f</td>
+              <td>W-7</td>
+              <td>08:15</td>
+              <td class="status-go">Boarding</td>
+            </tr>
+            <tr>
+              <td>XO-882</td>
+              <td>Titan Station</td>
+              <td>W-2</td>
+              <td>09:40</td>
+              <td class="status-wait">Fueling</td>
+            </tr>
+            <tr>
+              <td>XO-119</td>
+              <td>Nebula Resort</td>
+              <td>W-11</td>
+              <td>10:00</td>
+              <td class="status-go">On Time</td>
+            </tr>
+            <tr>
+              <td>XO-307</td>
+              <td>Event Horizon</td>
+              <td>W-5</td>
+              <td>11:30</td>
+              <td class="status-delay">Delayed</td>
+            </tr>
+            <tr>
+              <td>XO-550</td>
+              <td>Kepler-186f</td>
+              <td>W-9</td>
+              <td>13:00</td>
+              <td class="status-stop">Cancelled</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5">SCANNING FOR INCOMING VESSELS...</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 3: Booking -->
+    <section id="booking">
+      <div class="kiosk-interface">
+        <h2>SELF-SERVICE TERMINAL</h2>
+
+        <form action="#" method="POST">
+
+          <fieldset>
+            <legend>IDENTITY VERIFICATION</legend>
+
+            <div class="field">
+              <label for="full-designation">Full Designation:</label>
+              <input type="text" id="full-designation" name="full_designation" placeholder="Enter full name" required />
+            </div>
+
+            <div class="field">
+              <label for="id-code">ID Code:</label>
+              <input type="text" id="id-code" name="id_code" placeholder="Enter ID code" required />
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>FLIGHT PARAMETERS</legend>
+
+            <div class="field">
+              <label for="destination-input">Destination:</label>
+              <input
+                type="search"
+                id="destination-input"
+                name="destination"
+                list="planets"
+                placeholder="Search destination..."
+              />
+              <datalist id="planets">
+                <option value="Kepler-186f"></option>
+                <option value="Titan Station"></option>
+                <option value="Nebula Resort"></option>
+                <option value="Event Horizon"></option>
+              </datalist>
+            </div>
+
+            <div class="field">
+              <label for="cabin-class">Cabin Class:</label>
+              <select id="cabin-class" name="cabin_class" required>
+                <option value="economy">Economy (Stasis Pod)</option>
+                <option value="business">Business (Quarters)</option>
+                <option value="first">First (Zero-G Suite)</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <button type="submit">AUTHORIZE CREDIT TRANSFER</button>
+
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Step 7: Footer -->
+  <footer>
+    <p>TERMINAL X-OMEGA // OPERATED BY GALACTIC FEDERATION // SAFETY NOT GUARANTEED</p>
+  </footer>
+
+</body>
+</html>

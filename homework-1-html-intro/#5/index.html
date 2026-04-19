@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weasleys' Wizard Wheezes</title>
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Uncial+Antiqua&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange: #e85d04;
+      --orange-light: #f48c06;
+      --purple: #7b2d8b;
+      --purple-light: #c77dff;
+      --yellow: #ffd60a;
+      --yellow-light: #fff3b0;
+      --bg: #1a0533;
+      --card: #2d0a4e;
+      --card-border: #6a0dad;
+      --text: #f8e9ff;
+      --text-dim: #c9a8e0;
+      --gold: #ffd700;
+      --red: #c1121f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(123,45,139,0.4) 0%, transparent 60%),
+        repeating-linear-gradient(60deg, transparent, transparent 30px, rgba(255,214,10,0.02) 30px, rgba(255,214,10,0.02) 31px);
+      font-family: 'Crimson Pro', Georgia, serif;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* ── SKIP LINK ── */
+    .skip-link {
+      display: block;
+      text-align: center;
+      padding: 8px;
+      background: var(--purple);
+      color: var(--yellow);
+      font-size: 13px;
+      letter-spacing: 2px;
+      font-family: 'Fredoka One', cursive;
+      text-decoration: none;
+    }
+    .skip-link:hover { background: var(--orange); }
+
+    /* ── MAIN CONTAINER ── */
+    #shop-container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── HEADER ── */
+    .shop-header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(32px, 8vw, 68px);
+      line-height: 1.1;
+      letter-spacing: 2px;
+      text-shadow:
+        3px 3px 0 var(--orange),
+        6px 6px 0 rgba(232,93,4,0.3);
+      animation: wobble 4s ease-in-out infinite;
+    }
+    @keyframes wobble {
+      0%,100% { transform: rotate(-1deg); }
+      50%      { transform: rotate(1deg); }
+    }
+
+    h2 {
+      font-family: 'Crimson Pro', serif;
+      font-size: clamp(14px, 3vw, 20px);
+      font-weight: 400;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .warning-banner {
+      background: var(--orange);
+      color: #fff;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 14px;
+      letter-spacing: 1px;
+      margin: 16px 0 0;
+      clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0% 50%);
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-top: 28px;
+      position: relative;
+      box-shadow: 0 4px 30px rgba(106,13,173,0.3), inset 0 0 40px rgba(0,0,0,0.2);
+    }
+    .card::before {
+      content: '✦';
+      position: absolute;
+      top: -10px; left: 20px;
+      background: var(--card);
+      padding: 0 8px;
+      color: var(--purple-light);
+      font-size: 16px;
+    }
+
+    .card-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(20px, 4vw, 30px);
+      color: var(--yellow);
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+
+    /* ── TEXT FORMATTING ── */
+    mark {
+      background: var(--yellow);
+      color: var(--bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    del {
+      color: var(--red);
+      opacity: 0.8;
+    }
+    ins {
+      color: #57cc99;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    sub { font-size: 10px; color: var(--text-dim); }
+
+    .price-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 12px 0;
+      font-size: 16px;
+      align-items: baseline;
+    }
+
+    /* ── LISTS ── */
+    .section-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 14px;
+      letter-spacing: 3px;
+      color: var(--purple-light);
+      text-transform: uppercase;
+      margin: 18px 0 8px;
+    }
+
+    ul { list-style: none; padding: 0; }
+    ul li {
+      font-size: 16px;
+      color: var(--text);
+      padding: 6px 0 6px 24px;
+      position: relative;
+      border-bottom: 1px dashed rgba(199,125,255,0.2);
+    }
+    ul li::before {
+      content: '★';
+      position: absolute; left: 0;
+      color: var(--yellow);
+      font-size: 12px;
+      top: 8px;
+    }
+
+    ol { list-style: none; counter-reset: steps; padding: 0; }
+    ol li {
+      counter-increment: steps;
+      font-size: 16px;
+      color: var(--text);
+      padding: 8px 0 8px 36px;
+      position: relative;
+      border-bottom: 1px dashed rgba(199,125,255,0.2);
+    }
+    ol li::before {
+      content: counter(steps);
+      position: absolute; left: 0;
+      background: var(--orange);
+      color: #fff;
+      font-family: 'Fredoka One', cursive;
+      font-size: 13px;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      top: 8px;
+    }
+
+    dl dt {
+      font-family: 'Fredoka One', cursive;
+      font-size: 17px;
+      color: var(--orange-light);
+      margin-top: 12px;
+    }
+    dl dd {
+      font-size: 15px;
+      color: var(--text-dim);
+      border-left: 3px solid var(--purple-light);
+      padding-left: 12px;
+      margin: 4px 0 0 6px;
+    }
+
+    /* ── IMAGES ── */
+    .image-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .img-frame {
+      border: 3px solid var(--purple-light);
+      border-radius: 8px;
+      padding: 8px;
+      background: rgba(255,255,255,0.04);
+      text-align: center;
+      box-shadow: 0 0 20px rgba(199,125,255,0.3);
+    }
+    .img-frame img { display: block; border-radius: 4px; }
+    .img-caption {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+
+    /* ── LINKS ── */
+    .links-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    a {
+      font-family: 'Fredoka One', cursive;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    a.btn-external {
+      background: var(--yellow);
+      color: var(--bg);
+    }
+    a.btn-external:hover { background: var(--orange-light); transform: translateY(-2px); }
+
+    a.btn-email {
+      background: transparent;
+      border: 2px solid var(--red);
+      color: #ff6b6b;
+    }
+    a.btn-email:hover { background: var(--red); color: #fff; transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    .shop-footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: var(--text-dim);
+      opacity: 0.5;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 20px 18px; }
+      .image-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#potions">Jump to Love Potions</a>
+
+  <div id="shop-container">
+
+    <!-- Part 2: Header -->
+    <div class="shop-header">
+      <h1 style="color: purple; text-align: center;">Weasleys' Wizard Wheezes</h1>
+      <h2>Proprietors: Fred &amp; George Weasley</h2>
+      <p class="warning-banner">
+        <strong>WARNING: DO NOT SELL TO RON WEASLEY (HE WANTS A DISCOUNT).</strong>
+      </p>
+    </div>
+
+    <!-- Part 3: Skiving Snackboxes -->
+    <div class="card">
+      <p class="card-title">Skiving Snackboxes</p>
+
+      <p>
+        <mark>NEW!</mark> &nbsp;
+        <i>Why go to class when you can be sick?</i>
+      </p>
+
+      <div class="price-row">
+        <span>Original Price: <del>10 Galleons</del></span>
+        <span>Sale Price: <ins>5 Galleons</ins> <sub>vat included</sub></span>
+      </div>
+    </div>
+
+    <!-- Part 4: Lists -->
+    <div class="card">
+      <p class="card-title">The Inventory</p>
+
+      <!-- Unordered list -->
+      <p class="section-label">WonderWitch Collection</p>
+      <ul id="potions">
+        <li>Pygmy Puffs</li>
+        <li>Love Potions</li>
+        <li>10-Second Pimple Vanisher</li>
+      </ul>
+
+      <!-- Ordered list -->
+      <p class="section-label">How to Use "Fainting Fancies"</p>
+      <ol>
+        <li>Eat the orange half of the sweet.</li>
+        <li>Faint dramatically in front of Snape.</li>
+        <li>Eat the purple half to restore health.</li>
+      </ol>
+
+      <!-- Description list -->
+      <p class="section-label">Product Effects</p>
+      <dl>
+        <dt>U-No-Poo</dt>
+        <dd>The constipation sensation that's gripping the nation!</dd>
+        <dt>Extendable Ears</dt>
+        <dd>Great for eavesdropping on Order of the Phoenix meetings.</dd>
+      </dl>
+    </div>
+
+    <!-- Part 5: Images -->
+    <div class="card">
+      <p class="card-title">Magical Illustrations</p>
+      <div class="image-row">
+
+        <div class="img-frame">
+          <img
+            src="https://example.com/pygmy.jpg"
+            alt="A pink, fluffy Pygmy Puff looking cute"
+            title="Best Seller!"
+            width="200"
+          />
+          <p class="img-caption">Pygmy Puff — Best Seller!</p>
+        </div>
+
+        <div class="img-frame">
+          <img
+            src="images/weasley_logo.jpeg"
+            alt="W logo"
+            width="120"
+          />
+          <p class="img-caption">Official Shop Logo</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Part 6: Links -->
+    <div class="card">
+      <p class="card-title">Owl Post &amp; Links</p>
+      <div class="links-section">
+        <a
+          class="btn-external"
+          href="https://google.com"
+          target="_blank"
+        >🏦 Gringotts Bank</a>
+
+        <a
+          class="btn-email"
+          href="mailto:molly@burrow.com"
+        >📬 Complain to our Mother</a>
+      </div>
+    </div>
+
+    <p class="shop-footer">© Weasleys' Wizard Wheezes · Diagon Alley · Est. 1996 · Mischief Managed.</p>
+
+  </div>
+
+</body>
+</html>

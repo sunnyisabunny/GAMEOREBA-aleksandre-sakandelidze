@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marine Database: Straw Hat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&family=Cinzel:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --parchment: #f2e4c4;
+      --parchment-dark: #d9c89a;
+      --parchment-shadow: #b89d60;
+      --ink: #1a0a00;
+      --red: #8b0000;
+      --gold: #8b6914;
+      --stamp-red: rgba(160, 20, 20, 0.82);
+      --marine-blue: #1a3a5c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #2a1a0a;
+      background-image:
+        repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 10px),
+        repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 10px);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px 60px;
+      font-family: 'Special Elite', cursive;
+    }
+
+    /* Skip link */
+    .skip-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #f2e4c4;
+      font-family: 'Special Elite', cursive;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-decoration: underline;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .skip-link:hover { opacity: 1; }
+
+    #poster-container {
+      width: 100%;
+      max-width: 560px;
+      background: var(--parchment);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+      border: 6px double var(--parchment-shadow);
+      box-shadow:
+        0 0 0 10px var(--parchment-dark),
+        0 0 0 14px var(--parchment-shadow),
+        0 20px 80px rgba(0,0,0,0.7),
+        inset 0 0 60px rgba(139,105,20,0.15);
+      padding: 36px 40px 44px;
+      position: relative;
+      animation: unfurl 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    @keyframes unfurl {
+      from { opacity: 0; transform: scaleY(0.6) translateY(-30px); filter: blur(4px); }
+      to   { opacity: 1; transform: scaleY(1) translateY(0); filter: blur(0); }
+    }
+
+    /* Corner ornaments */
+    #poster-container::before,
+    #poster-container::after {
+      content: '✦';
+      position: absolute;
+      font-size: 22px;
+      color: var(--gold);
+      opacity: 0.5;
+    }
+    #poster-container::before { top: 10px; left: 14px; }
+    #poster-container::after  { bottom: 10px; right: 14px; }
+
+    /* WANTED h1 */
+    h1 {
+      font-family: 'Rye', cursive;
+      font-size: clamp(52px, 14vw, 90px);
+      text-align: center;
+      color: brown;
+      font-style: serif;
+      letter-spacing: 8px;
+      line-height: 1;
+      margin-bottom: 6px;
+      text-shadow: 3px 3px 0 rgba(139,69,19,0.3);
+    }
+
+    .divider {
+      border: none;
+      border-top: 3px double var(--parchment-shadow);
+      margin: 10px 0;
+    }
+    .divider-thin {
+      border: none;
+      border-top: 1px solid var(--parchment-shadow);
+      margin: 8px 0;
+      opacity: 0.5;
+    }
+
+    /* Luffy image */
+    .portrait-frame {
+      text-align: center;
+      margin: 14px 0;
+      position: relative;
+    }
+    .portrait-frame img {
+      display: block;
+      margin: 0 auto;
+      border: 4px solid var(--parchment-shadow);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.1);
+      background: #c8b070;
+    }
+
+    /* h2 name */
+    h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(18px, 5vw, 28px);
+      text-align: center;
+      color: var(--ink);
+      letter-spacing: 4px;
+      margin: 10px 0 6px;
+    }
+
+    /* DEAD OR ALIVE */
+    .dead-or-alive {
+      text-align: center;
+      font-size: 15px;
+      color: var(--red);
+      letter-spacing: 3px;
+      margin-bottom: 4px;
+    }
+    .dead-or-alive sub {
+      font-size: 9px;
+      color: var(--gold);
+      letter-spacing: 1px;
+      opacity: 0.8;
+    }
+
+    /* Bounty */
+    .bounty-block {
+      background: var(--ink);
+      color: var(--parchment);
+      text-align: center;
+      padding: 12px 16px;
+      margin: 14px 0 10px;
+      position: relative;
+    }
+    .bounty-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      opacity: 0.6;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .bounty-amount {
+      font-family: 'Rye', cursive;
+      font-size: clamp(22px, 6vw, 34px);
+      line-height: 1.1;
+    }
+    mark {
+      background: #ffd700;
+      color: var(--ink);
+      padding: 0 4px;
+      border-radius: 2px;
+    }
+
+    .description {
+      text-align: center;
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    /* Sections */
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin: 14px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--parchment-shadow);
+      opacity: 0.6;
+    }
+
+    ul, ol, dl {
+      padding-left: 0;
+      margin: 0 0 6px 0;
+    }
+
+    ul { list-style: none; }
+    ul li {
+      font-size: 13px;
+      color: var(--ink);
+      padding: 3px 0 3px 18px;
+      position: relative;
+      border-bottom: 1px dashed rgba(139,105,20,0.2);
+    }
+    ul li::before {
+      content: '☠';
+      position: absolute;
+      left: 0;
+      color: var(--red);
+      font-size: 10px;
+      top: 4px;
+    }
+
+    ol {
+      list-style: none;
+      counter-reset: crime-counter;
+    }
+    ol li {
+      counter-increment: crime-counter;
+      font-size: 13px;
+      color: var(--ink);
+      padding: 4px 0 4px 28px;
+      position: relative;
+      border-bottom: 1px dashed rgba(139,105,20,0.2);
+    }
+    ol li::before {
+      content: counter(crime-counter) '.';
+      position: absolute;
+      left: 0;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    dl dt {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      color: var(--ink);
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    dl dd {
+      font-size: 12px;
+      color: #4a3010;
+      padding-left: 14px;
+      border-left: 2px solid var(--parchment-shadow);
+      margin: 2px 0 4px 4px;
+    }
+
+    /* Marine logo */
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 3px double var(--parchment-shadow);
+    }
+    .logo-row img {
+      opacity: 0.85;
+    }
+
+    /* Links */
+    .links-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    a {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--marine-blue);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(26,58,92,0.3);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    a:hover {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    /* STAMP */
+    .stamp {
+      position: absolute;
+      top: 50px;
+      right: -10px;
+      width: 110px;
+      height: 110px;
+      border: 5px solid var(--stamp-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(18deg);
+      opacity: 0.75;
+      pointer-events: none;
+    }
+    .stamp span {
+      font-family: 'Rye', cursive;
+      font-size: 13px;
+      color: var(--stamp-red);
+      text-align: center;
+      line-height: 1.3;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 480px) {
+      #poster-container { padding: 24px 22px 32px; }
+      .stamp { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#crimes">Skip to Crimes</a>
+
+  <div id="poster-container">
+
+    <!-- Stamp overlay -->
+    <div class="stamp"><span>MOST<br>DANGER<br>OUS</span></div>
+
+    <!-- Part 2: Headline -->
+    <h1 style="font-family: serif; color: brown;">WANTED</h1>
+    <hr class="divider" />
+
+    <!-- Part 4 image: Luffy -->
+    <div class="portrait-frame">
+      <img
+        src="https://static.wikia.nocookie.net/onepiece/images/6/6d/Monkey_D._Luffy_Anime_Post_Timeskip_Infobox.png/revision/latest?cb=20240306200817"
+        alt="Straw Hat Luffy laughing"
+        width="300px"
+      />
+    </div>
+
+    <hr class="divider-thin" />
+
+    <h2>Monkey D. Luffy</h2>
+
+    <p class="dead-or-alive">
+      <strong>DEAD OR ALIVE</strong>
+      <sub>Reward valid only for capture</sub>
+    </p>
+
+    <hr class="divider" />
+
+    <!-- Part 3: Bounty -->
+    <div class="bounty-block">
+      <p class="bounty-label">Bounty</p>
+      <p class="bounty-amount"><mark>3,000,000,000</mark> <i>Berries</i></p>
+    </div>
+
+    <p class="description"><small>Consumer of the Hito Hito no Mi, Model: Nika.</small></p>
+
+    <hr class="divider-thin" />
+
+    <!-- Part 4: Crew -->
+    <p class="section-title">Known Associates</p>
+    <ul>
+      <li>Roronoa Zoro</li>
+      <li>Nami</li>
+      <li>Sanji</li>
+    </ul>
+
+    <!-- Part 4: Crimes -->
+    <p class="section-title">Criminal Record</p>
+    <ol id="crimes">
+      <li>Declared war on the World Government (Enies Lobby).</li>
+      <li>Breached Impel Down.</li>
+      <li>Defeated Kaido in Wano.</li>
+    </ol>
+
+    <!-- Part 4: Devil Fruit -->
+    <p class="section-title">Devil Fruit Powers</p>
+    <dl>
+      <dt>Gomu Gomu no Mi</dt>
+      <dd>Gives the user a rubber body.</dd>
+    </dl>
+
+    <!-- Part 5: Marine Logo -->
+    <div class="logo-row">
+      <img
+        src="images/marine_logo.jpeg"
+        alt="Marine Headquarters Logo"
+        width="80px"
+      />
+    </div>
+
+    <!-- Part 6: Links -->
+    <div class="links-row">
+      <a href="mailto:akainu@marines.gov">REPORT TO MARINES</a>
+      <a href="https://example.com" target="_blank">Grand Line News ↗</a>
+    </div>
+
+  </div>
+
+</body>
+</html>

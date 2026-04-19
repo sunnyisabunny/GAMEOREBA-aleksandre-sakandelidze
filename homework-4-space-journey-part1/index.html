@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jovian Drift SOS</title>
+  <link rel="stylesheet" href="./styles/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #020b18;
+      --panel: rgba(4, 18, 38, 0.85);
+      --border: #0d4f8a;
+      --glow: #00aaff;
+      --glow2: #f97316;
+      --text: #c8e6ff;
+      --dim: #3a6080;
+      --danger: #ef4444;
+      --green: #22d3a0;
+      --gold: #f59e0b;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 100% 60% at 50% 100%, rgba(255,120,30,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(0,100,255,0.08) 0%, transparent 60%);
+      min-height: 100vh;
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 60px;
+    }
+
+    /* Starfield */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 35%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 82% 8%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5%  90%, rgba(255,255,255,0.4) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── HEADER ── */
+    .sos-header {
+      text-align: center;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+    .sos-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 6px;
+      color: var(--danger);
+      animation: blink 1.2s step-end infinite;
+      margin-bottom: 8px;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+    .sos-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(24px, 6vw, 48px);
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 20px var(--glow), 0 0 50px rgba(0,170,255,0.3);
+    }
+    .sos-subtitle {
+      font-size: 12px;
+      color: var(--dim);
+      letter-spacing: 3px;
+      margin-top: 6px;
+    }
+
+    /* ── FORM CONTAINER ── */
+    form {
+      width: 100%;
+      max-width: 640px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── FIELDSET ── */
+    fieldset {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 24px 28px;
+      position: relative;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 30px rgba(0,100,200,0.1), inset 0 0 20px rgba(0,0,0,0.3);
+    }
+    fieldset::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 20px;
+      width: 40px; height: 2px;
+      background: var(--glow);
+      box-shadow: 0 0 8px var(--glow);
+    }
+
+    legend {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--glow);
+      text-transform: uppercase;
+      padding: 0 10px;
+      position: relative;
+      top: -2px;
+    }
+
+    /* ── FORM ROWS ── */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 16px;
+    }
+    .field:first-of-type { margin-top: 8px; }
+
+    label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      background: rgba(0, 20, 50, 0.8);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      border-radius: 2px;
+    }
+    input::placeholder { color: var(--dim); }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--glow);
+      box-shadow: 0 0 12px rgba(0,170,255,0.2);
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url('homework-4-space-journey-part1/styles/spaceship.png');
+      background-size: 12px 8px;
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    select option { background: #020b18; }
+
+    textarea { resize: vertical; }
+
+    /* Checkbox row */
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(13,79,138,0.4);
+      background: rgba(0,20,50,0.4);
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--glow);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .checkbox-row label {
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: var(--text);
+      text-transform: none;
+      cursor: pointer;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    button {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      padding: 14px 28px;
+      border: 1px solid;
+      transition: all 0.2s;
+      flex: 1;
+    }
+    button[type="submit"] {
+      background: var(--glow);
+      border-color: var(--glow);
+      color: #020b18;
+      font-weight: 700;
+      box-shadow: 0 0 20px rgba(0,170,255,0.3);
+    }
+    button[type="submit"]:hover {
+      background: #33bbff;
+      box-shadow: 0 0 40px rgba(0,170,255,0.6);
+      transform: translateY(-2px);
+    }
+    button[type="reset"] {
+      background: transparent;
+      border-color: var(--dim);
+      color: var(--dim);
+    }
+    button[type="reset"]:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+      box-shadow: 0 0 12px rgba(239,68,68,0.2);
+    }
+
+    /* ── FOOTER ── */
+    .transmission-footer {
+      margin-top: 24px;
+      font-size: 10px;
+      color: var(--dim);
+      letter-spacing: 3px;
+      text-align: center;
+      z-index: 1;
+    }
+
+    @media (max-width: 480px) {
+      fieldset { padding: 18px 16px; }
+      .btn-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sos-header">
+    <p class="sos-label">⚠ EMERGENCY BROADCAST — EUROPA-1 ⚠</p>
+    <h1 class="sos-title">JOVIAN DRIFT SOS</h1>
+    <p class="sos-subtitle">ORBIT ALTITUDE: 421,700 KM · SIGNAL STRENGTH: 12%</p>
+  </div>
+
+  <iframe id="bg-frame" src="styles/effect.html"></iframe>
+
+  <form method="post" action="#">
+
+    <!-- Phase 2: Pilot Credentials -->
+    <fieldset>
+      <legend>Pilot Credentials</legend>
+
+      <div class="field">
+        <label for="pilot-name">Pilot Name:</label>
+        <input
+          type="text"
+          id="pilot-name"
+          name="pilot_name"
+          placeholder="Enter name"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="access-code">Access Code:</label>
+        <input
+          type="password"
+          id="access-code"
+          name="access_code"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="email">Command Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+        />
+      </div>
+    </fieldset>
+
+    <!-- Phase 3: Vessel Diagnostics -->
+    <fieldset>
+      <legend>Vessel Diagnostics</legend>
+
+      <div class="field">
+        <label for="hull-damage">Hull Damage (%):</label>
+        <input
+          type="number"
+          id="hull-damage"
+          name="hull_damage"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="emergency-level">Emergency Level:</label>
+        <select id="emergency-level" name="emergency_level" required>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <!-- Phase 4: Mission Log & Evidence -->
+    <fieldset>
+      <legend>Mission Log &amp; Evidence</legend>
+
+      <div class="field">
+        <label for="sos-message">SOS Message:</label>
+        <textarea
+          id="sos-message"
+          name="sos_message"
+          rows="3"
+          required
+        ></textarea>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="quarantine" name="quarantine" required />
+        <label for="quarantine">I agree to quarantine protocols.</label>
+      </div>
+    </fieldset>
+
+    <!-- Phase 5: Buttons -->
+    <div class="btn-row">
+      <button type="submit">INITIATE TRANSMISSION</button>
+      <button type="reset">RESET SYSTEM</button>
+    </div>
+
+  </form>
+
+  <p class="transmission-footer">EUROPA-1 · JOVIAN SECTOR · TRANSMISSION ENCRYPTED</p>
+
+  <script src="./scripts/launch.js"></script>
+</body>
+</html>
